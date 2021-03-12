@@ -1,8 +1,5 @@
 ########################### SCRIPT ################################
-# First assessment of the benthic meiofauna sensitivity to low human-impacted mangroves in French Guiana
-# by : Claire Michelet, Daniela Zeppilli, Cédric Hubas, Elisa Baldrighi, Philippe Cuny, Guillaume Dirberg, Cécile Militon, Romain Walcker, Dominique Lamy, Ronan Jézéquel, Justine Receveur, Franck Gilbert, Amonda El Houssainy, Aurélie Dufour, Lars-Eric Heimbürger-Boavida, Isabelle Bihannic, Léa Sylvi, Baptiste Vivier, Emma Michaud
-# For publication in Forest (MDPI)
-# *Corresponding author : emma.michaud@univ-brest.fr
+
 ########################### SCRIPT ################################
 
 #####################
@@ -139,6 +136,11 @@ bc.mfa<-function(df,bloc,fac,spcos){
 #####################
 # Examples
 #####################
+# From the following article
+# First assessment of the benthic meiofauna sensitivity to low human-impacted mangroves in French Guiana
+# by : Claire Michelet, Daniela Zeppilli, Cédric Hubas, Elisa Baldrighi, Philippe Cuny, Guillaume Dirberg, Cécile Militon, Romain Walcker, Dominique Lamy, Ronan Jézéquel, Justine Receveur, Franck Gilbert, Amonda El Houssainy, Aurélie Dufour, Lars-Eric Heimbürger-Boavida, Isabelle Bihannic, Léa Sylvi, Baptiste Vivier, Emma Michaud
+# see repository : https://github.com/Hubas-prog/Script-meiofauna-sensitivity
+
 conta<-read.csv("Contaminants.csv",h=T,sep=";",dec=",")
 pigments<-read.csv("pigments.csv",h=T,sep=";",dec=",")
 CHN<-read.csv("CHN.csv",h=T,sep=";",dec=",")
