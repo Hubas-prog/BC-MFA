@@ -1,5 +1,5 @@
 ########################### SCRIPT ################################
-
+# by Cédric Hubas 
 ########################### SCRIPT ################################
 
 #####################
@@ -44,8 +44,8 @@ my.palette<-colorRampPalette(c("purple","black","red1","green3","blue"))
 # Note
 #####################
 
-# The function returns a plot of the Multiple factor analysis ordiantion (topleft ppnnel)
-# The function returns also a plot of the supervised MFA (i.e. BC-MFA) in the bottom left pannel
+# The function returns a plot of the Multiple factor analysis ordination (top-left pannel)
+# The function returns also a plot of the supervised MFA (i.e. BC-MFA) in the bottom-left pannel
 # Total Inertia Explained (T.I.E) by the chosen factor is given in the second plot
 # The function returns also a plot of the loadings (i.e. variables) of the BC-MFA
 # percentages of inertia explained by each axis is also given in axis titles
