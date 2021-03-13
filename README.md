@@ -2,14 +2,14 @@
 
 # Packages
 
-library(ade4)
-library(vegan)
-library(scales)
+library(ade4),
+library(vegan),
+library(scales),
 library(factoextra)
 
 # Description
 
-The folowing function performs a specific supervised analysis. It performs a Multiple Factor Analysis by using the dudi.pca function of package ade4. The generated objects of class pca and dudi. are then used to perform a Between Class Analysis. The fianl result is a supervised MFA called BC-MFA
+The folowing function performs a specific supervised analysis. It performs a Multiple Factor Analysis by using the dudi.pca function of package ade4. The generated objects of class pca and dudi. are then used to perform a Between Class Analysis. The final result is a supervised MFA called BC-MFA
 
 # Usage
 
