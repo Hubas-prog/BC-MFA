@@ -14,6 +14,7 @@ library(scales)
 #####################
 row.pal <- colorRampPalette(c("red","green","blue"))
 col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
+# please modify col.pal and row.pal to change scores and loadings plot label colors
 
 #####################
 # Description
@@ -22,18 +23,18 @@ col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
 # The folowing function performs a specific supervised analysis.
 # It performs a Multiple Factor Analysis by using the dudi.pca function of package ade4.
 # The generated objects of class pca and dudi. are then used to perform a Between Class Analysis.
-# The fianl result is a supervised MFA called BC-MFA
+# The final result is a supervised MFA called BC-MFA
 
 #####################
 # Usage
 #####################
 
-#bc.mfa(df,bloc,fac,cos2)
+#bc.mfa(df,bloc,fac,cos2,...)
 
 #####################
 # Arguments
 #####################
-#note: #The used must identify several groups of variables within the data frame in odert to build argument bloc.
+# note: The used must identify several groups of variables within the data frame in odert to build argument bloc.
 
 #df => a data frame with n rows (individuals) and p columns (numeric variables).
 # bloc => a vector or factor object giving the groups for the corresponding groups of variable of df.
