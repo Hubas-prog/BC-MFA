@@ -4,8 +4,7 @@
 
 library(ade4),
 library(vegan),
-library(scales),
-library(factoextra)
+library(scales)
 
 # Description
 
