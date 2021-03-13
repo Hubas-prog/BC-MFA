@@ -38,7 +38,7 @@ my.palette<-colorRampPalette(c("purple","black","red1","green3","blue"))
 #df => a data frame with n rows (individuals) and p columns (numeric variables).
 # bloc => a vector or factor object giving the groups for the corresponding groups of variable of df.
 # fac => an external factor used for the supervised analysis (BCA). 
-# cos2 => A numerical value giving the cos2 by which variables text and symbols should be magnified in the variable plot.
+# spcos => A numerical value giving the cos2 by which variables text and symbols should be magnified in the variable plot.
 
 #####################
 # Note
@@ -158,6 +158,3 @@ bloc<-c(dim(conta[,2:32])[2],
         dim(CHN[,2:3])[2])
 
 bc.mfa(df=DATA[,1:58],bloc=bloc,fac=fact<-factor(DATA$sites),spcos=0.45)
-
-?randtest
-
