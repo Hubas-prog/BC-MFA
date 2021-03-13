@@ -8,12 +8,12 @@
 library(ade4)
 library(vegan)
 library(scales)
-library(factoextra)
 
 #####################
 # AESTHETICS
 #####################
-my.palette<-colorRampPalette(c("purple","black","red1","green3","blue"))
+row.pal <- colorRampPalette(c("red","green","blue"))
+col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
 
 #####################
 # Description
@@ -82,16 +82,16 @@ bc.mfa<-function(df,bloc,fac,spcos=0,...){
   
   plot(res.mfa$li[,2]~res.mfa$li[,1],
        pch=21,cex=2,col="white",
-       bg=rainbow(length(levels(fac)))[fac],
-       xlab=paste("Axis 1 : ",round(varexp[1],2),"%"),
-       ylab=paste("Axis 2 : ",round(varexp[2],2),"%"),
+       bg=row.pal(length(levels(fac)))[fac],
+       xlab=paste("Axis 1 : ",round(varexp1[1],2),"%"),
+       ylab=paste("Axis 2 : ",round(varexp1[2],2),"%"),
        main="MFA scores")
   
   ordihull(res.mfa$li,fac,lab=T)
   
   plot(res.bcmfa$ls[,2]~res.bcmfa$ls[,1],
        pch=21,cex=2,col="white",
-       bg=rainbow(length(levels(fac)))[fac],
+       bg=row.pal(length(levels(fac)))[fac],
        xlab=paste("Axis 1 : ",round(varexp2[1],2),"%"),
        ylab=paste("Axis 2 : ",round(varexp2[2],2),"%"),
        main=paste("BC-MFA scores","| T.I.E=",round(res.bcmfa$ratio,2)*100,"%",sep=""))
@@ -102,9 +102,7 @@ bc.mfa<-function(df,bloc,fac,spcos=0,...){
        xlab=paste("Axis 1 : ",round(varexp2[1],2),"%"),
        ylab=paste("Axis 2 : ",round(varexp2[2],2),"%"),
        ylim=c(-1,1),xlim=c(-1,1),
-       main="BC-MFA loadings",
-       sub=paste("Total inertia explained:",round(res.bcmfa$ratio,2)*100,"%"),
-      ...)
+       main="BC-MFA loadings")
   
   arrows(x0=0,y0=0,x1=res.bcmfa$co[,1],y1=res.bcmfa$co[,2],col="lightgrey",length=0.1)
   
@@ -112,7 +110,7 @@ bc.mfa<-function(df,bloc,fac,spcos=0,...){
   
   var.group<-factor(rep(v,bloc),
                     levels=v)
-  res.bcmfa$co$col<-my.palette(length(bloc))[var.group]
+  res.bcmfa$co$col<-col.pal(length(bloc))[var.group]
   
   newco <- res.bcmfa$co[cos2[,1]>spcos | cos2[,2]>spcos,] 
   oldco <- res.bcmfa$co[cos2[,1]<spcos & cos2[,2]<spcos,]
@@ -129,7 +127,7 @@ bc.mfa<-function(df,bloc,fac,spcos=0,...){
   
   legend("topleft",
          v,
-         text.col=my.palette(length(bloc)),cex=0.8,box.lty=0)
+         text.col=col.pal(length(bloc)),cex=0.8,box.lty=0)
 
   return(randtest(res.bcmfa))
 }
@@ -158,4 +156,4 @@ bloc<-c(dim(conta[,2:32])[2],
         dim(enviro[,3:7])[2],
         dim(CHN[,2:3])[2])
 
-bc.mfa(df=DATA[,1:58],bloc=bloc,fac=fact<-factor(DATA$sites),spcos=0.45)
+bc.mfa(df=DATA[,1:58],bloc=bloc,fac=fact<-factor(DATA$sites),spcos=0.40)
