@@ -8,7 +8,7 @@ library(scales)
 
 # Description
 
-The folowing function performs a specific supervised analysis. It performs a Multiple Factor Analysis by using the dudi.pca function of package ade4. The generated objects of class pca and dudi. are then used to perform a Between Class Analysis. The final result is a supervised MFA called BC-MFA
+The folowing function performs a specific supervised analysis. It performs a Multiple Factor Analysis (MFA) as described by Escofier and Pages [1] by using the dudi.pca function of package ade4. The generated objects of class pca and dudi. are then used to perform a Between Class Analysis. The final result is a supervised MFA called BC-MFA
 
 # Usage
 
@@ -29,3 +29,7 @@ cos2 => A numerical value giving the cos2 by which variables text and symbols sh
 # Note
 
 The function returns a plot of the Multiple factor analysis ordiantion (topleft pannel). The function returns also a plot of the supervised MFA (i.e. BC-MFA) in the bottom left pannel. Total Inertia Explained (T.I.E) by the chosen factor is given in the second plot. The function returns also a plot of the loadings (i.e. variables) of the BC-MFA. percentages of inertia explained by each axis is also given in axis titles. The functions also returns the result of the generic function randtest() whch performs a Monte-Carlo test of the BC-MFA
+
+# References
+
+[1] Escofier B, Pagès J (1994) Multiple factor analysis (AFMULT package). Computational Statistics & Data Analysis. 18(1):121-140. https://doi.org/10.1016/0167-9473(94)90135-X
