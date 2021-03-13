@@ -55,7 +55,7 @@ my.palette<-colorRampPalette(c("purple","black","red1","green3","blue"))
 # Function
 #####################
 
-bc.mfa<-function(df,bloc,fac,spcos){
+bc.mfa<-function(df,bloc,fac,spcos=0,...){
   v<-NULL
   for(i in 1:length(bloc)){
     v[i]<-rep(paste("Group",i,sep=""))
@@ -103,7 +103,8 @@ bc.mfa<-function(df,bloc,fac,spcos){
        ylab=paste("Axis 2 : ",round(varexp2[2],2),"%"),
        ylim=c(-1,1),xlim=c(-1,1),
        main="BC-MFA loadings",
-       sub=paste("Total inertia explained:",round(res.bcmfa$ratio,2)*100,"%"))
+       sub=paste("Total inertia explained:",round(res.bcmfa$ratio,2)*100,"%"),
+      ...)
   
   arrows(x0=0,y0=0,x1=res.bcmfa$co[,1],y1=res.bcmfa$co[,2],col="lightgrey",length=0.1)
   
