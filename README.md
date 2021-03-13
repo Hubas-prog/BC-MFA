@@ -25,7 +25,7 @@ bloc => a vector or factor object giving the groups for the corresponding groups
 
 fac => an external factor used for the supervised analysis (BCA). 
 
-cos2 => A numerical value giving the cos2 by which variables text and symbols should be magnified in the variable plot.
+cos2 => A numerical value giving the cos2 by which variables text and symbols should be magnified in the variable plot. by default = 0.
 
 # Note
 
