@@ -21,15 +21,15 @@ col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
 #####################
 
 # The folowing function performs a specific supervised analysis.
-# It performs a Multiple Factor Analysis by using the dudi.pca function of package ade4.
-# The generated objects of class pca and dudi. are then used to perform a Between Class Analysis.
+# It performs a Multiple Factor Analysis as described by Escofier and Pages [1] by using the dudi.pca function of package ade4.
+# The generated objects of class pca and dudi. are then used to perform a Between Class Analysis as described by Dolédec and Chessel [2].
 # The final result is a supervised MFA called BC-MFA
 
 #####################
 # Usage
 #####################
 
-#bc.mfa(df,bloc,fac,cos2,...)
+#bc.mfa(df,bloc,fac,spcos,...)
 
 #####################
 # Arguments
@@ -158,3 +158,10 @@ bloc<-c(dim(conta[,2:32])[2],
         dim(CHN[,2:3])[2])
 
 bc.mfa(df=DATA[,1:58],bloc=bloc,fac=fact<-factor(DATA$sites),spcos=0.40)
+
+#####################
+# References
+#####################
+
+#[1] Escofier B. and Pagès J. (1994) Multiple factor analysis (AFMULT package). Computational Statistics & Data Analysis. 18(1):121-140. https://doi.org/10.1016/0167-9473(94)90135-X
+#[2] Dolédec, S. and Chessel, D. (1987) Rythmes saisonniers et composantes stationnelles en milieu aquatique I- Description d'un plan d'observations complet par projection de variables. Acta Oecologica, Oecologia Generalis, 8, 3, 403–426.
