@@ -17,7 +17,7 @@ bc.mfa(df,bloc,fac,cos2)
 
 # Arguments
 
-note: The user must identify several groups of variables within the data frame in odert to build argument bloc.
+note: The user must identify several groups of variables within the data frame in odert to build argument bloc. Please modify col.pal and row.pal to change scores and loadings plot label colors
 
 df => a data frame with n rows (individuals) and p columns (numeric variables).
 
