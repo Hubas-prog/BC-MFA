@@ -117,9 +117,9 @@ bc.mfa<-function(df,bloc,fac,spcos=0,...){
   oldco <- res.bcmfa$co[cos2[,1]<spcos & cos2[,2]<spcos,]
   
   if(spcos==0){
-    text(newco[,1], newco[,2],rownames(newco),col=newco$col,cex=1.2)
+    text(newco[,1], newco[,2],rownames(newco),col=newco$col,...)
   }else{
-    text(newco[,1], newco[,2],rownames(newco),col=newco$col,cex=1.2)
+    text(newco[,1], newco[,2],rownames(newco),col=newco$col,...)
     text(oldco[,1], oldco[,2],rownames(oldco),col=alpha(oldco$col,0.3),cex=0.8)
   }
   
