@@ -8,7 +8,8 @@
 library(ade4)
 library(ggplot2)
 library(scales)
-#library(cowplot)
+library(cowplot)
+#library(devtools)
 
 #####################
 # AESTHETICS
