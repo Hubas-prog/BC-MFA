@@ -29,21 +29,21 @@ col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
 # Usage
 #####################
 
-#bc.mfa(df,bloc,fac,spcos,X=1,Y=2,...)
+# bc.mfa(df,bloc,fac,spcos,X=1,Y=2)
 
 #####################
 # Arguments
 #####################
 # note: The used must identify several groups of variables within the data frame in odert to build argument bloc.
 
-#df => a data frame with n rows (individuals) and p columns (numeric variables).
+# df => a data frame with n rows (individuals) and p columns (numeric variables).
 # bloc => a vector or factor object giving the groups for the corresponding groups of variable of df.
 # fac => an external factor used for the supervised analysis (BCA). 
 # spcos => a numerical value giving the cos2 by which variables text and symbols should be magnified in the variable plot.
-# X and Y => the dimension of the principal components to be plotted. Please note that the BCA allows the extraction of a number k-1 of components which will be a function of the number of modalities (k) of the factor. If the fac factor has less than 3 modalities, the analysis wont be possible. 
+# X and Y => the dimension of the principal components to be plotted.
 
 #####################
-# Note
+# Notes
 #####################
 
 # The function returns a plot of the Multiple factor analysis ordination (top-left pannel)
@@ -52,11 +52,15 @@ col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
 # The function returns also a plot of the loadings (i.e. variables) of the BC-MFA
 # percentages of inertia explained by each axis is also given in axis titles
 # The functions also returns the result of the generic function randtest() whch performs a Monte-Carlo test of the BC-MFA
+# Please note that the BCA allows the extraction of a number k-1 of components which will be a function of the number of modalities (k) of the factor.
+# If the fac factor has less than 3 modalities, the analysis will not be possible. 
 
 #####################
 # geom_convexhull function
 # by : Charles Martin https://github.com/cmartin/ggConvexHull
 #####################
+
+# source("https://github.com/cmartin/ggConvexHull/blob/master/R/geom_convexhull.R")
 
 StatConvexHull <- ggplot2::ggproto(
   "StatConvexHull",
