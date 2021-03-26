@@ -8,7 +8,7 @@
 library(ade4)
 library(ggplot2)
 library(scales)
-library(cowplot)
+#library(cowplot)
 
 #####################
 # AESTHETICS
@@ -218,8 +218,8 @@ bc.mfa(df=dataset,
 #####################
 # From the following article
 # Michelet C, Zeppilli D, Hubas C, Baldrighi E, Cuny P, Dirberg G, Militon C, Walcker R, Lamy D, Jézéquel R, Receveur J, Gilbert F, Houssainy AE, Dufour A, Heimbürger-Boavida L-E, Bihannic I, Sylvi L, Vivier B, Michaud E.
-# First Assessment of the Benthic Meiofauna Sensitivity to Low Human-Impacted Mangroves in French Guiana. Forests.
-# 2021; 12(3):338.
+# First Assessment of the Benthic Meiofauna Sensitivity to Low Human-Impacted Mangroves in French Guiana.
+# Forests. 2021; 12(3):338.
 # https://doi.org/10.3390/f12030338
 # see repository : https://github.com/Hubas-prog/Script-meiofauna-sensitivity
 # Data available at : https://doi.org/10.5281/zenodo.4592299
