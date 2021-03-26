@@ -29,7 +29,7 @@ col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
 # Usage
 #####################
 
-#bc.mfa(df,bloc,fac,spcos,...)
+#bc.mfa(df,bloc,fac,spcos,X=1,Y=2,...)
 
 #####################
 # Arguments
@@ -39,7 +39,8 @@ col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
 #df => a data frame with n rows (individuals) and p columns (numeric variables).
 # bloc => a vector or factor object giving the groups for the corresponding groups of variable of df.
 # fac => an external factor used for the supervised analysis (BCA). 
-# spcos => A numerical value giving the cos2 by which variables text and symbols should be magnified in the variable plot.
+# spcos => a numerical value giving the cos2 by which variables text and symbols should be magnified in the variable plot.
+# X and Y => the dimension of the principal components to be plotted. Please note that the BCA allows the extraction of a number k-1 of components which will be a function of the number of modalities (k) of the factor. If the fac factor has less than 3 modalities, the analysis wont be possible. 
 
 #####################
 # Note
