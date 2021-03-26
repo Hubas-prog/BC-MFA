@@ -12,7 +12,7 @@ The folowing function performs a specific supervised analysis. It performs a Mul
 
 # Usage
 
-bc.mfa(df,bloc,fac,spcos=0,X=1,Y=2,...)
+bc.mfa(df,bloc,fac,spcos=0,X=1,Y=2)
 
 # Arguments
 
