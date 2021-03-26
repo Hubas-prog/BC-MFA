@@ -6,13 +6,13 @@
 # PACKAGES
 #####################
 library(ade4)
-library(vegan)
+library(ggplot2)
 library(scales)
+library(cowplot)
 
 #####################
 # AESTHETICS
 #####################
-row.pal <- colorRampPalette(c("red","green","blue"))
 col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
 # please modify col.pal and row.pal to change scores and loadings plot label colors
 
@@ -53,10 +53,45 @@ col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
 # The functions also returns the result of the generic function randtest() whch performs a Monte-Carlo test of the BC-MFA
 
 #####################
-# Function
+# geom_convexhull function
+# by : Charles Martin https://github.com/cmartin/ggConvexHull
 #####################
 
-bc.mfa<-function(df,bloc,fac,spcos=0,...){
+StatConvexHull <- ggplot2::ggproto(
+  "StatConvexHull",
+  ggplot2::Stat,
+  required_aes = c("x", "y"),
+  compute_group = function(self, data, scales, params) {
+    data[chull(data$x, data$y), ]
+  }
+)
+
+stat_convexhull <- function(mapping = NULL, data = NULL, geom = "polygon",
+                            position = "identity", show.legend = NA,
+                            inherit.aes = TRUE, ...) {
+  ggplot2::layer(
+    stat = StatConvexHull,
+    data = data, mapping = mapping, geom = geom, position = position,
+    show.legend = show.legend, inherit.aes = inherit.aes, params = list(...)
+  )
+}
+
+geom_convexhull <- function (mapping = NULL, data = NULL, stat = "convex_hull", position = "identity",
+                             ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
+  ggplot2::layer(
+    data = data, mapping = mapping, stat = stat, geom = ggplot2::GeomPolygon,
+    position = position, show.legend = show.legend, inherit.aes = inherit.aes,
+    params = list(na.rm = na.rm, ...)
+  )
+}
+
+
+#####################
+# bc.mfa function
+# by Cédric Hubas : https://github.com/Hubas-prog/BC-MFA
+#####################
+
+bc.mfa<-function(df,bloc,fac,spcos=0,X=1,Y=2,...){
   v<-NULL
   for(i in 1:length(bloc)){
     v[i]<-rep(paste("Group",i,sep=""))
@@ -69,72 +104,112 @@ bc.mfa<-function(df,bloc,fac,spcos=0,...){
   }
   names(LI)<-v
   
-  # MFA
-  eig<-unlist(lapply(LI,function(x){dudi.pca(x,scannf=F,nf=2)$eig[1]}))
-  res.mfa<-dudi.pca(df,col.w=rep(1/eig,bloc),scannf=F,nf=2)
-  varexp1<-res.mfa$eig*100/sum(res.mfa$eig)
+# MFA
+eig<-unlist(lapply(LI,function(x){dudi.pca(x,scannf=F,nf=2)$eig[1]}))
+res.mfa<-dudi.pca(df,col.w=rep(1/eig,bloc),scannf=F,nf=ncol(df))
+varexp1<-res.mfa$eig*100/sum(res.mfa$eig)
   
-  # BC-MFA
-  res.bcmfa<-bca(res.mfa,fac,scannf=F,nf=2)
-  varexp2<-res.bcmfa$eig*100/sum(res.bcmfa$eig)
-  
-  #plots
-  par(layout(matrix(c(1,2,3,3),nrow=2)),mar=c(4,4,4,4))
-  
-  plot(res.mfa$li[,2]~res.mfa$li[,1],
-       pch=21,cex=2,col="white",
-       bg=row.pal(length(levels(fac)))[fac],
-       xlab=paste("Axis 1 : ",round(varexp1[1],2),"%"),
-       ylab=paste("Axis 2 : ",round(varexp1[2],2),"%"),
-       main="MFA scores")
-  
-  ordihull(res.mfa$li,fac,lab=T)
-  
-  plot(res.bcmfa$ls[,2]~res.bcmfa$ls[,1],
-       pch=21,cex=2,col="white",
-       bg=row.pal(length(levels(fac)))[fac],
-       xlab=paste("Axis 1 : ",round(varexp2[1],2),"%"),
-       ylab=paste("Axis 2 : ",round(varexp2[2],2),"%"),
-       main=paste("BC-MFA scores","| T.I.E=",round(res.bcmfa$ratio,2)*100,"%",sep=""))
-  
-  ordihull(res.bcmfa$ls,fac,lab=T)
-  
-  plot(res.bcmfa$co[,2]~res.bcmfa$co[,1],type="n",
-       xlab=paste("Axis 1 : ",round(varexp2[1],2),"%"),
-       ylab=paste("Axis 2 : ",round(varexp2[2],2),"%"),
-       ylim=c(-1,1),xlim=c(-1,1),
-       main="BC-MFA loadings")
-  
-  arrows(x0=0,y0=0,x1=res.bcmfa$co[,1],y1=res.bcmfa$co[,2],col="lightgrey",length=0.1)
-  
-  cos2 <- as.matrix(res.bcmfa$co[,1:2])*as.matrix(res.bcmfa$co[,1:2])
-  
-  var.group<-factor(rep(v,bloc),
-                    levels=v)
-  res.bcmfa$co$col<-col.pal(length(bloc))[var.group]
-  
-  newco <- res.bcmfa$co[cos2[,1]>spcos | cos2[,2]>spcos,] 
-  oldco <- res.bcmfa$co[cos2[,1]<spcos & cos2[,2]<spcos,]
-  
-  if(spcos==0){
-    text(newco[,1], newco[,2],rownames(newco),col=newco$col,...)
-  }else{
-    text(newco[,1], newco[,2],rownames(newco),col=newco$col,...)
-    text(oldco[,1], oldco[,2],rownames(oldco),col=alpha(oldco$col,0.3),cex=0.8)
-  }
-  
-  abline(h=0,lty="dashed")
-  abline(v=0,lty="dashed")
-  
-  legend("topleft",
-         v,
-         text.col=col.pal(length(bloc)),cex=0.8,box.lty=0)
+# BC-MFA
+k<-length(levels(factor(fac)))
+res.bcmfa<-bca(res.mfa,fac,scannf=F,nf=k-1)
+varexp2<-res.bcmfa$eig*100/sum(res.bcmfa$eig)
 
-  return(randtest(res.bcmfa))
+#plots
+
+mfaX<-res.mfa$li[,X]
+mfaY<-res.mfa$li[,Y]
+
+MFA.ind<-ggplot(res.mfa$li,aes(x=res.mfa$li[,X],y=res.mfa$li[,Y],col=fac))+
+  geom_point()+
+  geom_convexhull(alpha = 0.3,aes(fill = fac))+
+  ggtitle("MFA scores")+
+  xlab(paste("Axis 1 : ",round(varexp1[1],2),"%"))+
+  ylab(paste("Axis 2 : ",round(varexp1[1],2),"%"))+
+  theme_bw()
+
+BCMFA.ind<-ggplot(res.bcmfa$ls,aes(x=res.bcmfa$ls[,X],y=res.bcmfa$ls[,Y],col=fac))+
+  geom_point()+
+  geom_convexhull(alpha = 0.3,aes(fill = fac))+
+  ggtitle(paste("BC-MFA scores","| T.I.E=",
+                round(res.bcmfa$ratio,2)*100,
+                "%",
+                sep=""))+
+  xlab(paste("Axis 1 : ",round(varexp2[1],2),"%"))+
+  ylab(paste("Axis 2 : ",round(varexp2[2],2),"%"))+
+  theme_bw()
+
+cos2 <- as.matrix(res.bcmfa$co[,c(X,Y)])*as.matrix(res.bcmfa$co[,c(X,Y)])
+var.group<-factor(rep(v,bloc),levels=v)
+res.bcmfa$co$col<-col.pal(length(bloc))[var.group]
+col.filter<-cos2[,1]>spcos | cos2[,2]>spcos
+
+if(spcos==0) {
+  BCMFA.var<-ggplot(res.bcmfa$co,aes(x=res.bcmfa$co[,X],
+                                     y=res.bcmfa$co[,Y]))+
+    geom_segment(aes(x = 0, y = 0,
+                     xend = res.bcmfa$co[,X],
+                     yend = res.bcmfa$co[,Y]),
+                 arrow = arrow(length = unit(0.5, "cm")),
+                 col="lightgrey")+
+    annotate(geom="text",
+             x=res.bcmfa$co[,X],
+             y=res.bcmfa$co[,Y],
+             label=rownames(res.mfa$co),
+             size=4,
+             col=res.bcmfa$co$col)+
+    ggtitle("BC-MFA variables")+
+    xlab(paste("Axis 1 : ",round(varexp2[1],2),"%"))+
+    ylab(paste("Axis 2 : ",round(varexp2[2],2),"%"))+
+    theme_bw()
+}else {
+  BCMFA.var<-ggplot(res.bcmfa$co,aes(x=res.bcmfa$co[,X],
+                                     y=res.bcmfa$co[,Y]))+
+    geom_segment(aes(x = 0, y = 0,
+                     xend = res.bcmfa$co[,X],
+                     yend = res.bcmfa$co[,Y]),
+                 arrow = arrow(length = unit(0.5, "cm")),
+                 col="lightgrey")+
+    annotate(geom="text",
+             x=res.bcmfa$co[,X],
+             y=res.bcmfa$co[,Y],
+             label=rownames(res.mfa$co),
+             size=4,
+             col=alpha(res.bcmfa$co$col,c(0.15,1)[factor(col.filter)]))+
+    ggtitle("BC-MFA variables")+
+    xlab(paste("Axis 1 : ",round(varexp2[1],2),"%"))+
+    ylab(paste("Axis 2 : ",round(varexp2[2],2),"%"))+
+    theme_bw()
+}
+
+left<-plot_grid(MFA.ind,BCMFA.ind,labels=c("a","b"),ncol=1)
+PLOT<-plot_grid(left,BCMFA.var,labels=c("","c"),ncol=2)
+return(list(PLOT,perm.test=randtest(res.bcmfa),
+                 BCMFAcos2=cos2,
+                 BCMFAco=res.bcmfa$co,
+                 BCMFAind=res.bcmfa$ls))
 }
 
 #####################
-# Examples
+# Example1
+#####################
+
+data(meaudret)
+fauna <- meaudret$spe
+enviro <- meaudret$env
+ISvariable1 <- meaudret$design$season
+ISvariable2 <- meaudret$design$site
+dataset <- data.frame(fauna,enviro)
+bloc <- c(dim(fauna)[2],dim(enviro)[2])
+
+bc.mfa(df=dataset,
+       bloc=bloc,
+       fac=factor(ISvariable1),
+       spcos=0.3,
+       X=1,
+       Y=3)
+
+#####################
+# Example2
 #####################
 # From the following article
 # Michelet C, Zeppilli D, Hubas C, Baldrighi E, Cuny P, Dirberg G, Militon C, Walcker R, Lamy D, Jézéquel R, Receveur J, Gilbert F, Houssainy AE, Dufour A, Heimbürger-Boavida L-E, Bihannic I, Sylvi L, Vivier B, Michaud E.
@@ -142,24 +217,26 @@ bc.mfa<-function(df,bloc,fac,spcos=0,...){
 # 2021; 12(3):338.
 # https://doi.org/10.3390/f12030338
 # see repository : https://github.com/Hubas-prog/Script-meiofauna-sensitivity
+# Data available at : https://doi.org/10.5281/zenodo.4592299
 
-conta<-read.csv("Contaminants.csv",h=T,sep=";",dec=",")
-pigments<-read.csv("pigments.csv",h=T,sep=";",dec=",")
-CHN<-read.csv("CHN.csv",h=T,sep=";",dec=",")
-bact<-read.csv("Communaute-Bacterienne.csv",h=T,sep=";",dec=",")
-enviro<-read.csv("dataENV.csv",h=T,sep=";",dec=",")
-DATA<-cbind(conta[,2:32],pigments[,2:19],bact[,3:4],enviro[,3:7],CHN[,2:3])
+conta<-read.csv("https://zenodo.org/record/4592300/files/Contaminants.csv?download=1",h=T,sep=";",dec=",")
+pigments<-read.csv("https://zenodo.org/record/4592300/files/pigments.csv?download=1",h=T,sep=";",dec=",")
+CHN<-read.csv("https://zenodo.org/record/4592300/files/CHN.csv?download=1",h=T,sep=";",dec=",")
+enviro<-read.csv("https://zenodo.org/record/4592300/files/dataENV.csv?download=1",h=T,sep=";",dec=",")
+DATA<-cbind(conta[,2:32],pigments[,2:19],enviro[,3:7],CHN[,2:3])
 DATA$sites<-substr(conta$groupe,1,2)
 DATA$layer<-paste("L",substr(conta$groupe,4,4),sep="")
 DATA$core<-substr(conta$groupe,3,3)
 
 bloc<-c(dim(conta[,2:32])[2],
         dim(pigments[,2:19])[2],
-        dim(bact[,3:4])[2],
         dim(enviro[,3:7])[2],
         dim(CHN[,2:3])[2])
 
-bc.mfa(df=DATA[,1:58],bloc=bloc,fac=fact<-factor(DATA$sites),spcos=0.40)
+bc.mfa(df=DATA[,1:56],
+       bloc=bloc,
+       fac=factor(paste(DATA$sites)),
+       spcos=0.3)
 
 #####################
 # References
