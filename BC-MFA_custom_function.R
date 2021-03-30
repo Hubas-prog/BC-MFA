@@ -61,7 +61,7 @@ col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
 # by : Charles Martin https://github.com/cmartin/ggConvexHull
 #####################
 
-# source("https://github.com/cmartin/ggConvexHull/blob/master/R/geom_convexhull.R")
+# devtools::install_github("cmartin/ggConvexHull",force=T)
 
 StatConvexHull <- ggplot2::ggproto(
   "StatConvexHull",
