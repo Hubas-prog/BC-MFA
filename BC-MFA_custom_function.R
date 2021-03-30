@@ -30,7 +30,7 @@ col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
 # Usage
 #####################
 
-# bc.mfa(df,bloc,fac,spcos,X=1,Y=2)
+#bc.mfa(df,bloc,fac,spcos=0,X=1,Y=2)
 
 #####################
 # Arguments
@@ -44,7 +44,7 @@ col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
 # X and Y => the dimension of the principal components to be plotted.
 
 #####################
-# Notes
+# Note
 #####################
 
 # The function returns a plot of the Multiple factor analysis ordination (top-left pannel)
@@ -91,7 +91,6 @@ geom_convexhull <- function (mapping = NULL, data = NULL, stat = "convex_hull", 
   )
 }
 
-
 #####################
 # bc.mfa function
 # by Cédric Hubas : https://github.com/Hubas-prog/BC-MFA
@@ -129,8 +128,8 @@ MFA.ind<-ggplot(res.mfa$li,aes(x=res.mfa$li[,X],y=res.mfa$li[,Y],col=fac))+
   geom_point()+
   geom_convexhull(alpha = 0.3,aes(fill = fac))+
   ggtitle("MFA scores")+
-  xlab(paste("Axis 1 : ",round(varexp1[1],2),"%"))+
-  ylab(paste("Axis 2 : ",round(varexp1[1],2),"%"))+
+  xlab(paste("Axis ",X," : ",round(varexp1[X],2),"%"))+
+  ylab(paste("Axis ",Y," : ",round(varexp1[Y],2),"%"))+
   theme_bw()
 
 BCMFA.ind<-ggplot(res.bcmfa$ls,aes(x=res.bcmfa$ls[,X],y=res.bcmfa$ls[,Y],col=fac))+
@@ -140,8 +139,8 @@ BCMFA.ind<-ggplot(res.bcmfa$ls,aes(x=res.bcmfa$ls[,X],y=res.bcmfa$ls[,Y],col=fac
                 round(res.bcmfa$ratio,2)*100,
                 "%",
                 sep=""))+
-  xlab(paste("Axis 1 : ",round(varexp2[1],2),"%"))+
-  ylab(paste("Axis 2 : ",round(varexp2[2],2),"%"))+
+  xlab(paste("Axis ",X," : ",round(varexp2[X],2),"%"))+
+  ylab(paste("Axis ",Y," : ",round(varexp2[Y],2),"%"))+
   theme_bw()
 
 cos2 <- as.matrix(res.bcmfa$co[,c(X,Y)])*as.matrix(res.bcmfa$co[,c(X,Y)])
@@ -164,8 +163,8 @@ if(spcos==0) {
              size=4,
              col=res.bcmfa$co$col)+
     ggtitle("BC-MFA variables")+
-    xlab(paste("Axis 1 : ",round(varexp2[1],2),"%"))+
-    ylab(paste("Axis 2 : ",round(varexp2[2],2),"%"))+
+    xlab(paste("Axis ",X," : ",round(varexp2[X],2),"%"))+
+    ylab(paste("Axis ",Y," : ",round(varexp2[Y],2),"%"))+
     theme_bw()
 }else {
   BCMFA.var<-ggplot(res.bcmfa$co,aes(x=res.bcmfa$co[,X],
@@ -182,8 +181,8 @@ if(spcos==0) {
              size=4,
              col=alpha(res.bcmfa$co$col,c(0.15,1)[factor(col.filter)]))+
     ggtitle("BC-MFA variables")+
-    xlab(paste("Axis 1 : ",round(varexp2[1],2),"%"))+
-    ylab(paste("Axis 2 : ",round(varexp2[2],2),"%"))+
+    xlab(paste("Axis ",X," : ",round(varexp2[X],2),"%"))+
+    ylab(paste("Axis ",Y," : ",round(varexp2[Y],2),"%"))+
     theme_bw()
 }
 
@@ -212,7 +211,7 @@ bc.mfa(df=dataset,
        fac=factor(ISvariable1),
        spcos=0.3,
        X=1,
-       Y=3)
+       Y=2)
 
 #####################
 # Example2
