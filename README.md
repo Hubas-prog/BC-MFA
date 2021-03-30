@@ -3,8 +3,9 @@
 # Packages
 
 library(ade4),
-library(vegan),
-library(scales)
+library(ggplot2),
+library(scales),
+library(cowplot)
 
 # Description
 
