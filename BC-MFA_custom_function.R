@@ -14,7 +14,8 @@ library(cowplot)
 #####################
 # AESTHETICS
 #####################
-col.pal <- colorRampPalette(c("red3","orange","green3","royalblue","purple"))
+col.pal <- colorRampPalette(c("red3","orange","green3","royalblue"))
+row.pal <- colorRampPalette(c("#FFF587","#FF8C64","#FF665A","#7D6B7D","#A3A1A8"))
 # please modify col.pal and row.pal to change scores and loadings plot label colors
 
 #####################
@@ -127,20 +128,26 @@ mfaY<-res.mfa$li[,Y]
 MFA.ind<-ggplot(res.mfa$li,aes(x=res.mfa$li[,X],y=res.mfa$li[,Y],col=fac))+
   geom_point()+
   geom_convexhull(alpha = 0.3,aes(fill = fac))+
+  scale_fill_manual(values=row.pal(length(levels(fac))))+
+  scale_colour_manual(values=row.pal(length(levels(fac))))+
   ggtitle("MFA scores")+
   xlab(paste("Axis ",X," : ",round(varexp1[X],2),"%"))+
   ylab(paste("Axis ",Y," : ",round(varexp1[Y],2),"%"))+
+  labs(fill="Grouping variable",col="Grouping variable")+
   theme_bw()
 
 BCMFA.ind<-ggplot(res.bcmfa$ls,aes(x=res.bcmfa$ls[,X],y=res.bcmfa$ls[,Y],col=fac))+
   geom_point()+
+  scale_fill_manual(values=row.pal(length(levels(fac))))+
+  scale_colour_manual(values=row.pal(length(levels(fac))))+
   geom_convexhull(alpha = 0.3,aes(fill = fac))+
-  ggtitle(paste("BC-MFA scores","| T.I.E=",
+  ggtitle(paste("BC-MFA scores"," | T.I.E=",
                 round(res.bcmfa$ratio,2)*100,
                 "%",
                 sep=""))+
   xlab(paste("Axis ",X," : ",round(varexp2[X],2),"%"))+
   ylab(paste("Axis ",Y," : ",round(varexp2[Y],2),"%"))+
+  labs(fill="Explanatory variable",col="Explanatory variable")+
   theme_bw()
 
 cos2 <- as.matrix(res.bcmfa$co[,c(X,Y)])*as.matrix(res.bcmfa$co[,c(X,Y)])
@@ -150,7 +157,8 @@ col.filter<-cos2[,1]>spcos | cos2[,2]>spcos
 
 if(spcos==0) {
   BCMFA.var<-ggplot(res.bcmfa$co,aes(x=res.bcmfa$co[,X],
-                                     y=res.bcmfa$co[,Y]))+
+                                     y=res.bcmfa$co[,Y],col=var.group))+
+    scale_colour_manual(values=col.pal(length(levels(var.group))))+
     geom_segment(aes(x = 0, y = 0,
                      xend = res.bcmfa$co[,X],
                      yend = res.bcmfa$co[,Y]),
@@ -165,10 +173,12 @@ if(spcos==0) {
     ggtitle("BC-MFA variables")+
     xlab(paste("Axis ",X," : ",round(varexp2[X],2),"%"))+
     ylab(paste("Axis ",Y," : ",round(varexp2[Y],2),"%"))+
+    xlim(c(-1,1))+
+    ylim(c(-1,1))+
     theme_bw()
 }else {
   BCMFA.var<-ggplot(res.bcmfa$co,aes(x=res.bcmfa$co[,X],
-                                     y=res.bcmfa$co[,Y]))+
+                                     y=res.bcmfa$co[,Y],col=var.group))+
     geom_segment(aes(x = 0, y = 0,
                      xend = res.bcmfa$co[,X],
                      yend = res.bcmfa$co[,Y]),
@@ -183,6 +193,8 @@ if(spcos==0) {
     ggtitle("BC-MFA variables")+
     xlab(paste("Axis ",X," : ",round(varexp2[X],2),"%"))+
     ylab(paste("Axis ",Y," : ",round(varexp2[Y],2),"%"))+
+    xlim(c(-1,1))+
+    ylim(c(-1,1))+
     theme_bw()
 }
 
@@ -193,6 +205,9 @@ return(list(PLOT,perm.test=randtest(res.bcmfa),
                  BCMFAco=res.bcmfa$co,
                  BCMFAind=res.bcmfa$ls))
 }
+
+# col=alpha(res.bcmfa$co$col,c(0.15,1)[factor(col.filter)])
+
 
 #####################
 # Example1
@@ -209,7 +224,6 @@ bloc <- c(dim(fauna)[2],dim(enviro)[2])
 bc.mfa(df=dataset,
        bloc=bloc,
        fac=factor(ISvariable1),
-       spcos=0.3,
        X=1,
        Y=2)
 
@@ -240,8 +254,9 @@ bloc<-c(dim(conta[,2:32])[2],
 
 bc.mfa(df=DATA[,1:56],
        bloc=bloc,
-       fac=factor(paste(DATA$sites)),
-       spcos=0.3)
+     fac=factor(DATA$sites),
+       spcos=0)
+
 
 #####################
 # References
