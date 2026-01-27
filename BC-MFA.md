@@ -14,6 +14,7 @@ Cédric Hubas
 - [Arguments](#arguments)
 - [Example 1](#example-1)
 - [Example 2](#example-2)
+- [References](#references)
 
 # Description
 
@@ -322,3 +323,14 @@ bc.mfa(df=DATA[,1:56],
      fac=factor(DATA$sites),
        spcos=0)
 ```
+
+# References
+
+\[1\] Escofier B. and Pagès J. (1994) Multiple factor analysis (AFMULT
+package). Computational Statistics & Data Analysis. 18(1):121-140.
+<https://doi.org/10.1016/0167-9473(94)90135-X>
+
+\[2\] Dolédec, S. and Chessel, D. (1987) Rythmes saisonniers et
+composantes stationnelles en milieu aquatique I- Description d’un plan
+d’observations complet par projection de variables. Acta Oecologica,
+Oecologia Generalis, 8, 3, 403–426.
