@@ -77,7 +77,7 @@ geom_convexhull <- function (mapping = NULL, data = NULL, stat = "convex_hull", 
 # `bc.mfa` function by Cédric Hubas
 <https://github.com/Hubas-prog/BC-MFA>
 ```{r}
-bc.mfa<-function(df,bloc,fac,CLD.concentration,spcos=0,X=1,Y=2,...){
+bc.mfa<-function(df,bloc,fac,spcos=0,X=1,Y=2,...){
   v<-NULL
   for(i in 1:length(bloc)){
     v[i]<-rep(paste("Group",i,sep=""))
@@ -106,7 +106,7 @@ mfaX<-res.mfa$li[,X]
 mfaY<-res.mfa$li[,Y]
 
 MFA.ind<-ggplot(res.mfa$li,aes(x=res.mfa$li[,X],y=res.mfa$li[,Y],col=fac))+
-  geom_point(aes(size=CLD.concentration))+
+  geom_point()+
   geom_convexhull(alpha = 0.3,aes(fill = fac))+
   scale_fill_manual(values=row.pal(length(levels(fac))))+
   scale_colour_manual(values=row.pal(length(levels(fac))))+
@@ -114,15 +114,10 @@ MFA.ind<-ggplot(res.mfa$li,aes(x=res.mfa$li[,X],y=res.mfa$li[,Y],col=fac))+
   xlab(paste("Axis ",X," : ",round(varexp1[X],2),"%"))+
   ylab(paste("Axis ",Y," : ",round(varexp1[Y],2),"%"))+
   labs(fill="Grouping variable",col="Grouping variable")+
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
-        axis.text=element_text(size=14),
-        axis.title=element_text(size=14),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank())
+  theme_bw()
 
 BCMFA.ind<-ggplot(res.bcmfa$ls,aes(x=res.bcmfa$ls[,X],y=res.bcmfa$ls[,Y],col=fac))+
-  geom_point(aes(size=CLD.concentration))+
+  geom_point()+
   scale_fill_manual(values=row.pal(length(levels(fac))))+
   scale_colour_manual(values=row.pal(length(levels(fac))))+
   geom_convexhull(alpha = 0.3,aes(fill = fac))+
@@ -133,12 +128,7 @@ BCMFA.ind<-ggplot(res.bcmfa$ls,aes(x=res.bcmfa$ls[,X],y=res.bcmfa$ls[,Y],col=fac
   xlab(paste("Axis ",X," : ",round(varexp2[X],2),"%"))+
   ylab(paste("Axis ",Y," : ",round(varexp2[Y],2),"%"))+
   labs(fill="Explanatory variable",col="Explanatory variable")+
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
-        axis.text=element_text(size=14),
-        axis.title=element_text(size=14),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank())
+  theme_bw()
 
 cos2 <- as.matrix(res.bcmfa$co[,c(X,Y)])*as.matrix(res.bcmfa$co[,c(X,Y)])
 var.group<-factor(rep(v,bloc),levels=v)
@@ -165,12 +155,7 @@ if(spcos==0) {
     ylab(paste("Axis ",Y," : ",round(varexp2[Y],2),"%"))+
     xlim(c(-1,1))+
     ylim(c(-1,1))+
-    theme_bw()+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
-          axis.text=element_text(size=14),
-          axis.title=element_text(size=14),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank())
+    theme_bw()
 }else {
   BCMFA.var<-ggplot(res.bcmfa$co,aes(x=res.bcmfa$co[,X],
                                      y=res.bcmfa$co[,Y],col=var.group))+
@@ -190,26 +175,16 @@ if(spcos==0) {
     ylab(paste("Axis ",Y," : ",round(varexp2[Y],2),"%"))+
     xlim(c(-1,1))+
     ylim(c(-1,1))+
-    theme_bw()+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
-          axis.text=element_text(size=14),
-          axis.title=element_text(size=14),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank())
+    theme_bw()
 }
 
-left<-plot_grid(MFA.ind,BCMFA.ind,labels=c("a","b"),
-                ncol=1,
-                align = "v",
-                axis="lr")
+left<-plot_grid(MFA.ind,BCMFA.ind,labels=c("a","b"),ncol=1)
 PLOT<-plot_grid(left,BCMFA.var,labels=c("","c"),ncol=2)
 return(list(PLOT,perm.test=randtest(res.bcmfa),
                  BCMFAcos2=cos2,
                  BCMFAco=res.bcmfa$co,
-                 BCMFAind=res.bcmfa$ls,
-            MFAind=res.mfa$li))
+                 BCMFAind=res.bcmfa$ls))
 }
-
 ```
 
 # Usage
